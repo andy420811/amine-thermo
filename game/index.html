@@ -369,6 +369,36 @@ html:not([lang|="zh"]) .paper .body::first-letter { float: left; font-family: va
 .hcard.co2 { border-color: #6B5B2E; } .hcard.co2 .ico { background: rgba(244, 183, 64, .18); color: var(--co2); }
 .hcard.ang { border-color: #6B3E33; } .hcard.ang .ico { background: rgba(239, 99, 81, .18); color: var(--anger); }
 .hcard.money .ico { background: rgba(123, 211, 137, .15); color: var(--good); }
+/* "what you can tap": the lab, the price board, the empty lot and a plant, each with a small looping animation */
+.guide { display: grid; gap: 10px; margin: 10px 0 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); }
+.gcard { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 12px; align-items: center; background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.gcard svg { grid-row: span 2; width: 64px; height: 64px; border-radius: 10px; background: #A9D8F2; }
+.gcard b { font-size: 16px; align-self: end; }
+.gcard p { margin: 0; font-size: 14px; color: var(--muted); align-self: start; }
+.gi * { transform-box: fill-box; }
+.gi .bub { animation: gBub 1.8s ease-out infinite; }
+.gi .bub:nth-of-type(2) { animation-delay: .6s; } .gi .bub:nth-of-type(3) { animation-delay: 1.2s; }
+@keyframes gBub { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-9px); opacity: 0; } }
+.gi .frame { animation: gFrame 4s infinite; }
+@keyframes gFrame { 0%, 35%, 100% { stroke: #7BD389; } 50%, 85% { stroke: #EF6351; } }
+.gi .plo { animation: gLo 4s infinite; } .gi .phi { animation: gHi 4s infinite; }
+@keyframes gLo { 0%, 40%, 90%, 100% { opacity: 1; } 42%, 88% { opacity: 0; } }
+@keyframes gHi { 0%, 40%, 90%, 100% { opacity: 0; } 42%, 88% { opacity: 1; } }
+.gi .ang { transform-origin: left; animation: gAng 4s infinite; }
+@keyframes gAng { 0%, 35%, 100% { transform: scaleX(.2); } 55%, 88% { transform: scaleX(1); } }
+.gi .tap { transform-origin: center; animation: gTap 4s infinite; }
+@keyframes gTap { 0%, 15%, 45%, 100% { transform: scale(1); opacity: 0; } 25% { transform: scale(.7); opacity: .95; } 38% { transform: scale(1.6); opacity: 0; } }
+.gi .rise { transform-origin: bottom; animation: gRise 3.2s ease-out infinite; }
+@keyframes gRise { 0% { transform: scaleY(.05); } 75%, 100% { transform: scaleY(1); } }
+.gi .hook { animation: gHook 3.2s ease-in-out infinite; }
+@keyframes gHook { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+.gi .puff { animation: gPuff 2.4s ease-out infinite; }
+.gi .puff:nth-of-type(2) { animation-delay: .8s; } .gi .puff:nth-of-type(3) { animation-delay: 1.6s; }
+@keyframes gPuff { from { transform: translate(0, 0) scale(.6); opacity: .9; } to { transform: translate(6px, -12px) scale(1.4); opacity: 0; } }
+.gi .flow { animation: gFlow 1.5s linear infinite; }
+.gi .flow:nth-of-type(2) { animation-delay: .5s; } .gi .flow:nth-of-type(3) { animation-delay: 1s; }
+@keyframes gFlow { from { transform: translateY(0); opacity: 1; } to { transform: translateY(16px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .gi * { animation: none !important; } .gi .phi { opacity: 0; } }
 .introlink { background: none; border: 0; color: var(--amine); cursor: pointer; font-weight: 700; padding: 0; margin: 0 0 6px; }
 .intro .big { font-family: var(--display); font-size: clamp(28px, 7vw, 40px); line-height: 1; margin: 0 0 6px; font-weight: 400; }
 .intro .tag { color: var(--amine); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 13.5px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -531,7 +561,7 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
     <div class="led meter m-ang" id="mAng" role="button" tabindex="0"><div class="lab"><span data-i18n="mAnger">Public anger</span><span class="short" data-i18n="mAngerS">Anger</span><span data-i18n="mWhy">why? ›</span></div><div class="val" id="vAng">10%</div><div class="bar"><i id="bAng"></i></div><div class="sub" id="angWhy"></div></div>
     <div class="led meter" id="mFund"><div class="lab"><span data-i18n="mFunds">Funds</span></div><div class="val" id="vFund">$1,500M</div><div class="sub" id="sFund">± $0M / month</div></div>
     <div class="led meter" id="mGrid"><div class="lab"><span data-i18n="mGrid">Grid</span></div><div class="val" id="vGrid">— MW</div><div class="sub" id="sGrid">demand — MW</div></div>
-    <div class="sys" role="group" aria-label="Sound and language"><button id="sfxBtn" aria-pressed="true" title="Sound effects" aria-label="Sound effects">🔊</button><button id="musBtn" aria-pressed="false" title="Music" aria-label="Music">♪</button><button class="langbtn" id="langBtn" title="English / 繁體中文">中文</button></div>
+    <div class="sys" role="group" aria-label="Sound and language"><button id="guideBtn" title="What you can tap" aria-label="What you can tap">?</button><button id="sfxBtn" aria-pressed="true" title="Sound effects" aria-label="Sound effects">🔊</button><button id="musBtn" aria-pressed="false" title="Music" aria-label="Music">♪</button><button class="langbtn" id="langBtn" title="English / 繁體中文">中文</button></div>
   </header>
   <div class="scene" id="sceneBox"><canvas id="cv" aria-label="The town and its power plants. Tap a plant, the lab, the price board or the empty lot."></canvas><button class="paused-badge" id="pausedBadge" hidden><span data-i18n="pausedB">❚❚ Paused · tap to play</span></button><div class="toast" id="toast" role="status" hidden></div></div>
   <footer class="ctrlbar" id="ticker">
@@ -575,10 +605,16 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
           <div class="demo"><div class="bar"><i style="width:45%;background:linear-gradient(90deg,#F29B6B,var(--anger))"></i></div></div></div>
         <div class="hcard money"><div class="ico">$</div><b data-i18n="hMoneyT">And keep some money</b><p data-i18n="hMoney">Electricity bills pay for everything: capture plants, research, CO₂ storage. Below −$500M you go bankrupt. The price board in the town sets the bill.</p></div>
       </div>
-      <div class="btn-row"><button class="btn" id="introNext" data-i18n="introNext">Next: choose a region ›</button></div>
+      <div class="btn-row"><button class="btn" id="introNext" data-i18n="introNext">Next: what you can tap ›</button></div>
+    </div>
+    <div id="introC" hidden>
+      <button class="introlink" id="introBackC" data-i18n="introBackC">‹ How to play</button>
+      <h3 class="big" data-i18n="guideT">What you can tap</h3>
+      <div class="guide"></div>
+      <div class="btn-row"><button class="btn" id="introNextC" data-i18n="introNextC">Next: choose a region ›</button></div>
     </div>
     <div id="introB" hidden>
-    <button class="introlink" id="introBack" data-i18n="introBack">‹ How to play</button>
+    <button class="introlink" id="introBack" data-i18n="introBack">‹ What you can tap</button>
     <h3 class="big" data-i18n="brand">Capture City 2050</h3>
     <p class="lead" data-i18n="introLead">You run the power company of a coal-and-gas town. Keep the lights on until December 2050.</p>
     <div class="nick"><label for="nick" data-i18n="nickL">Nickname</label><input id="nick" maxlength="16" autocomplete="nickname"><span class="err" id="nickErr" hidden></span></div>
@@ -587,6 +623,14 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
     <div class="btn-row"><button class="btn" id="startBtn" data-i18n="start">Start 2026</button><button class="btn ghost" id="boardBtn" data-i18n="boardB">Leaderboard</button></div>
     <p class="credits" style="margin:12px 0 0" data-i18n="credits">Where the numbers come from.</p>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="ovGuide" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+    <button class="xclose" id="guideX" aria-label="Close">×</button>
+    <h3 id="guideTitle" data-i18n="guideT">What you can tap</h3>
+    <div class="guide"></div>
   </div>
 </div>
 
@@ -741,8 +785,11 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
     hAng: ['High prices, blackouts and smog anger people. At 100 % you are voted out.', '電價高、停電、空污都會累積民怨,到 100 % 就下台。'],
     hMoneyT: ['Money', '資金'],
     hMoney: ['The price board sets your income. Below −$500M you go bankrupt.', '電價看板決定收入。資金低於 −5 億美元就破產。'],
-    introNext: ['Next: choose a region ›', '下一步：選地區 ›'],
-    introBack: ['‹ How to play', '‹ 怎麼玩'],
+    introNext: ['Next: what you can tap ›', '下一步：可以點的東西 ›'],
+    introNextC: ['Next: choose a region ›', '下一步：選地區 ›'],
+    introBack: ['‹ What you can tap', '‹ 可以點的東西'],
+    introBackC: ['‹ How to play', '‹ 怎麼玩'],
+    guideT: ['What you can tap', '可以點的東西'],
     nickL: ['Nickname <small style="font-weight:400;color:var(--muted)">(optional)</small>', '暱稱 <small style="font-weight:400;color:var(--muted)">(選填)</small>'], start: ['Start 2026', '開始 2026'], boardB: ['Leaderboard', '排行榜'],
     credits: ['<b>Sources.</b> Lin Research Group papers (Chem. Eng. J. 2025, 2026; Ind. Eng. Chem. Res. 2025; Int. J. Greenh. Gas Control 2020), pilot-plant literature, NETL, EIA and IEAGHG. <span class="est">est.</span> = game estimate; plants, events and regions are simplified.', '<b>資料來源。</b>林育正實驗室論文(Chem. Eng. J. 2025、2026;Ind. Eng. Chem. Res. 2025;Int. J. Greenh. Gas Control 2020)、前導廠文獻、NETL、EIA、IEAGHG。<span class="est">est.</span> = 遊戲估計;電廠、事件與地區皆已簡化。'],
     close: ['Close', '關閉'], buildT: ['Build a new plant', '蓋新電廠'], priceT: ['Electricity price', '電價'],
@@ -783,6 +830,44 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
     document.querySelectorAll('[data-i18n]').forEach(el => { const v = I18N[el.dataset.i18n]; if (v) el.innerHTML = v[lang === 'zh' ? 1 : 0]; });
     ['langBtn', 'langBtn2'].forEach(id => { $(id).textContent = L('中文', 'EN'); });
     $('nick').placeholder = L('your name for the leaderboard', '上排行榜用的名字');
+    $('guideBtn').title = I18N.guideT[lang === 'zh' ? 1 : 0]; $('guideBtn').setAttribute('aria-label', $('guideBtn').title);
+    renderGuide();
+  }
+  // ---------- "what you can tap": the four things in the town, each drawn like it looks in the scene ----------
+  const TAPDOT = (x, y) => `<circle class="tap" cx="${x}" cy="${y}" r="6" fill="#FFF" stroke="#16243A" stroke-width="1.5"/>`;
+  const GUIDE = [
+    [`<rect x="0" y="56" width="64" height="8" fill="#6DB36F"/><rect x="9" y="34" width="46" height="23" fill="#EEF3F7"/><rect x="7" y="32" width="50" height="4" fill="#2EC4B6"/>
+      <rect x="12" y="39" width="40" height="9" fill="#7DB7DE"/><path d="M20 39v9M28 39v9M36 39v9M44 39v9" stroke="#4C6A88"/><rect x="28" y="50" width="8" height="7" fill="#3E5A78"/>
+      <path d="M38 32a8 8 0 0 1 16 0z" fill="#C3CFDC"/><circle cx="21" cy="25" r="6" fill="#E9F4F8" stroke="#2F4763" stroke-width="1.2"/><path d="M15.3 26.5a6 6 0 0 0 11.4 0z" fill="#2EC4B6"/>
+      <rect x="19.5" y="13" width="3" height="7" fill="#E9F4F8" stroke="#2F4763" stroke-width="1"/>
+      <g><circle class="bub" cx="21" cy="11" r="1.6" fill="#2EC4B6"/><circle class="bub" cx="23" cy="11" r="1.3" fill="#2EC4B6"/><circle class="bub" cx="19" cy="11" r="1.2" fill="#2EC4B6"/></g>
+      <rect x="14" y="2" width="36" height="8" fill="#E2A93B"/>${TAPDOT(46, 44)}`,
+      ['Research lab', '研究所'], ['Tap the lab to find better solvents and develop processes, one project at a time.', '點研究所找更好的溶劑、研發製程，一次一個項目。']],
+    [`<rect x="0" y="56" width="64" height="8" fill="#6DB36F"/><rect x="14" y="40" width="3" height="16" fill="#5B4636"/><rect x="47" y="40" width="3" height="16" fill="#5B4636"/>
+      <rect class="frame" x="4" y="8" width="56" height="32" rx="2" fill="#16243A" stroke="#7BD389" stroke-width="2.5"/>
+      <circle cx="12" cy="24" r="5" fill="#2B4163"/><path d="M9.5 24h5" stroke="#FFF" stroke-width="1.6"/><circle cx="52" cy="24" r="5" fill="#2B4163"/><path d="M49.5 24h5M52 21.5v5" stroke="#FFF" stroke-width="1.6"/>
+      <text class="plo" x="32" y="29" text-anchor="middle" font-family="monospace" font-weight="700" font-size="13" fill="#E9EFF7">$90</text>
+      <text class="phi" x="32" y="29" text-anchor="middle" font-family="monospace" font-weight="700" font-size="13" fill="#EF6351">$160</text>
+      <rect x="6" y="46" width="52" height="5" rx="2.5" fill="#16243A"/><rect class="ang" x="6" y="46" width="52" height="5" rx="2.5" fill="#EF6351"/>${TAPDOT(52, 24)}`,
+      ['Power price', '電價'], ['Use − / + on the price board: a higher price earns more, but above the OK price anger rises.', '用電價看板的 − / + 調整：電價越高收入越多，超過可接受價格民怨就上升。']],
+    [`<rect x="0" y="56" width="64" height="8" fill="#6DB36F"/><rect x="10" y="54" width="34" height="5" fill="none" stroke="#FFF" stroke-dasharray="3 2"/>
+      <rect class="rise" x="14" y="30" width="24" height="26" fill="#5A6E86"/><rect class="rise" x="30" y="20" width="5" height="36" fill="#9EAAB8"/>
+      <path d="M49 56V8M45 56V8M45 8h-36M49 8h8M47 3L13 8M47 3l10 5" stroke="#E2A93B" stroke-width="1.6" fill="none"/>
+      <g class="hook"><path d="M22 8v12" stroke="#333"/><rect x="18" y="20" width="8" height="5" fill="#8A6D3B"/></g>
+      <rect x="47" y="40" width="16" height="8" fill="#F3EEE2" stroke="#1A1A1A" stroke-width=".8"/><text x="55" y="46.5" text-anchor="middle" font-family="monospace" font-weight="700" font-size="7" fill="#1A1A1A">+</text>${TAPDOT(55, 44)}`,
+      ['Build a plant', '蓋電廠'], ['Tap the empty lot (+ Build) to add a plant for the summer and winter peaks.', '點空地（+ 蓋廠）多蓋一座電廠，撐過夏季和冬季尖峰。']],
+    [`<rect x="0" y="52" width="64" height="12" fill="#6DB36F"/><rect x="0" y="58" width="64" height="6" fill="#4F7F52"/>
+      <rect x="6" y="34" width="24" height="20" fill="#6E3F33"/><rect x="14" y="14" width="6" height="40" fill="#8C8C8C"/><rect x="14" y="18" width="6" height="2.5" fill="#C0392B"/>
+      <g><circle class="puff" cx="17" cy="11" r="4" fill="#FFF"/><circle class="puff" cx="17" cy="11" r="4" fill="#FFF"/><circle class="puff" cx="17" cy="11" r="4" fill="#FFF"/></g>
+      <rect x="34" y="18" width="8" height="36" fill="#2EC4B6"/><rect x="44" y="30" width="6" height="24" fill="#2EC4B6"/><rect x="35" y="18" width="1.5" height="36" fill="rgba(255,255,255,.4)"/>
+      <path d="M38 54v10" stroke="rgba(46,196,182,.7)" stroke-width="2"/>
+      <g><circle class="flow" cx="38" cy="50" r="1.8" fill="#2EC4B6"/><circle class="flow" cx="38" cy="50" r="1.8" fill="#2EC4B6"/><circle class="flow" cx="38" cy="50" r="1.8" fill="#2EC4B6"/></g>
+      <text x="53" y="63" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="6.5" fill="#E9EFF7">CO₂</text>${TAPDOT(18, 44)}`,
+      ['Add capture', '加裝捕捉'], ['Tap a plant to add CO₂ capture: about a year to build, and it uses some of the plant\'s power.', '點電廠加裝 CO₂ 捕捉：約一年蓋好，會用掉電廠一部分電力。']],
+  ];
+  function renderGuide() {
+    const h = GUIDE.map(([svg, t, p]) => `<div class="gcard"><svg class="gi" viewBox="0 0 64 64" aria-hidden="true">${svg}</svg><b>${L(...t)}</b><p>${L(...p)}</p></div>`).join('');
+    document.querySelectorAll('.guide').forEach(el => { el.innerHTML = h; });
   }
   function setLang(l) {
     lang = l; store.set('cc2050-lang', l);
@@ -799,7 +884,7 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
   let speed = 1, playing = false, acc = 0, lastT = 0;
   let toastN = 0, toastTimer = null;
   const MS_PER_MONTH = 1600;   // one game month every 1.6 s at 1×
-  const paused = () => ['ovLab', 'ovPlant', 'ovBuild', 'ovEvent', 'ovFind', 'ovPrice', 'ovAnger', 'ovBoard', 'ovHell'].some(id => !$(id).hidden);
+  const paused = () => ['ovLab', 'ovPlant', 'ovBuild', 'ovEvent', 'ovFind', 'ovPrice', 'ovAnger', 'ovBoard', 'ovHell', 'ovGuide'].some(id => !$(id).hidden);
 
   // ---------- best score per region (shown on the region cards) ----------
   const BEST_KEY = 'cc2050-best-v10';
@@ -1607,9 +1692,21 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
   const nick = () => ($('nick').value || '').trim().slice(0, 16);
   $('nick').value = store.get('cc2050-nick') || '';
   $('nick').addEventListener('input', () => { $('nick').classList.remove('bad'); $('nickErr').hidden = true; });
-  function introPage(b) { $('introA').hidden = b; $('introB').hidden = !b; $('ovIntro').querySelector('.sheet').scrollTop = 0; }
-  $('introNext').onclick = () => { SND.play('click'); introPage(true); };
-  $('introBack').onclick = () => { SND.play('click'); introPage(false); };
+  // three pages: A how to play, C what you can tap, B region and start (introPage(true) jumps to B)
+  function introPage(pg) {
+    pg = pg === true ? 'B' : pg || 'A';
+    ['A', 'C', 'B'].forEach(k => { $('intro' + k).hidden = k !== pg; });
+    $('ovIntro').querySelector('.sheet').scrollTop = 0;
+  }
+  const introGo = pg => () => { SND.play('click'); introPage(pg); };
+  $('introNext').onclick = introGo('C');
+  $('introBackC').onclick = introGo('A');
+  $('introNextC').onclick = introGo('B');
+  $('introBack').onclick = introGo('C');
+  // the ? button reopens the same cards during a game (pauses it like the other sheets)
+  $('guideBtn').onclick = () => { SND.play('click'); $('ovGuide').hidden = false; };
+  $('guideX').onclick = () => { $('ovGuide').hidden = true; };
+  $('ovGuide').addEventListener('click', e => { if (e.target === $('ovGuide')) $('ovGuide').hidden = true; });
   function showIntro() {
     const best = loadBest();
     $('regions').innerHTML = Object.entries(M.REGIONS).map(([id, r]) => {
@@ -1847,31 +1944,53 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
   }
 
   // ---- the research lab (tap it to open the research panel) ----
+  // it must not read as one more house: flat roof with a teal band, a glass front, a dome and a big flask on the roof, a gold sign
   function drawLab(horizon, blackout) {
-    const x = W * 0.02, w = W * 0.095, h = SH * 0.2, y = horizon - h + 4;
-    const busy = Object.keys(S.research)[0];
-    ctx.fillStyle = '#E4EAF0'; ctx.fillRect(x, y, w, h);
-    ctx.fillStyle = '#9DB0CB'; ctx.fillRect(x - 2, y - 4, w + 4, 5);
-    ctx.fillStyle = blackout ? '#2B2F38' : '#8CC8EE';
-    for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) ctx.fillRect(x + w * (0.1 + c * 0.3), y + h * (0.22 + r * 0.3), w * 0.2, h * 0.16);
-    ctx.fillStyle = '#5B6F8A'; ctx.fillRect(x + w * 0.42, y + h * 0.78, w * 0.16, h * 0.22);
-    ctx.strokeStyle = '#6B7C93'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x + w * 0.8, y - 4); ctx.lineTo(x + w * 0.8, y - 14); ctx.stroke();
-    ctx.fillStyle = '#C9D3DE'; ctx.beginPath(); ctx.arc(x + w * 0.8, y - 16, 6, Math.PI * 0.9, Math.PI * 2.1); ctx.fill();
-    ctx.fillStyle = '#16243A'; ctx.fillRect(x + w * 0.02, y - 19, Math.max(w * 0.7, 40), 14);
-    ctx.fillStyle = '#E2A93B'; ctx.font = FONT(700, 11); ctx.textAlign = 'center';
-    ctx.fillText(L('LAB', '研究所'), x + w * 0.02 + Math.max(w * 0.7, 40) / 2, y - 8); ctx.textAlign = 'left';
-    const hit = { id: '__lab', x0: x - 4, x1: x + w + 4, y0: y - 52, y1: horizon + 6 };
+    const x = W * 0.02, w = W * 0.095, h = SH * 0.17, y = horizon - h + 4;
+    const busy = Object.keys(S.research)[0], now = performance.now() / 1000;
+    const cx = x + w / 2;
+    ctx.fillStyle = '#7D8794'; ctx.fillRect(x - 5, horizon - 1, w + 10, 5);   // concrete forecourt
+    ctx.fillStyle = '#EEF3F7'; ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = '#2EC4B6'; ctx.fillRect(x - 2, y - 2, w + 4, Math.max(4, h * 0.13));
+    // glass curtain wall (glows teal while a project runs)
+    const gx = x + w * 0.06, gy = y + h * 0.22, gw = w * 0.88, gh = h * 0.44;
+    ctx.fillStyle = blackout ? '#2B2F38' : busy ? '#8BE8DF' : '#7DB7DE'; ctx.fillRect(gx, gy, gw, gh);
+    ctx.strokeStyle = '#4C6A88'; ctx.lineWidth = 1; ctx.beginPath();
+    for (let i = 1; i < 5; i++) { ctx.moveTo(gx + gw * i / 5, gy); ctx.lineTo(gx + gw * i / 5, gy + gh); }
+    ctx.moveTo(gx, gy + gh / 2); ctx.lineTo(gx + gw, gy + gh / 2); ctx.stroke();
+    ctx.fillStyle = '#3E5A78'; ctx.fillRect(x + w * 0.36, y + h * 0.72, w * 0.28, h * 0.28);   // glass double door
+    ctx.fillStyle = blackout ? '#2B2F38' : '#A8DCF2'; ctx.fillRect(x + w * 0.38, y + h * 0.75, w * 0.11, h * 0.25); ctx.fillRect(x + w * 0.51, y + h * 0.75, w * 0.11, h * 0.25);
+    // dome on the right of the roof
+    const dr = Math.max(6, w * 0.19), dx = x + w * 0.76;
+    ctx.fillStyle = '#C3CFDC'; ctx.beginPath(); ctx.arc(dx, y - 2, dr, Math.PI, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#4C6A88'; ctx.fillRect(dx - 1.5, y - 2 - dr * 0.92, 3, dr * 0.92);
+    // the flask: round body, neck, teal liquid that bubbles while busy
+    const fr = Math.max(7, w * 0.15), fx = x + w * 0.3, fcy = y - 2 - fr, ntop = fcy - fr * 1.9;
+    ctx.fillStyle = '#E9F4F8'; ctx.strokeStyle = '#2F4763'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(fx, fcy, fr, 0, 7); ctx.fill(); ctx.fillRect(fx - fr * 0.3, ntop, fr * 0.6, fr * 1.1);
+    ctx.save(); ctx.beginPath(); ctx.arc(fx, fcy, fr, 0, 7); ctx.clip();
+    ctx.fillStyle = '#2EC4B6'; ctx.fillRect(fx - fr, fcy - fr * 0.1 + (busy && !REDUCED ? Math.sin(now * 3) * fr * 0.08 : 0), fr * 2, fr * 1.2);
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(fx, fcy, fr, -Math.PI * 0.38, Math.PI * 1.38); ctx.moveTo(fx - fr * 0.3, fcy - fr * 0.93); ctx.lineTo(fx - fr * 0.3, ntop); ctx.moveTo(fx + fr * 0.3, fcy - fr * 0.93); ctx.lineTo(fx + fr * 0.3, ntop); ctx.stroke();
+    ctx.fillRect(fx - fr * 0.42, ntop - 2, fr * 0.84, 3);
+    if (busy && !REDUCED) for (let i = 0; i < 3; i++) {
+      const f = (now * 0.9 + i / 3) % 1;
+      ctx.fillStyle = `rgba(46,196,182,${0.9 * (1 - f)})`; ctx.beginPath(); ctx.arc(fx + Math.sin(f * 6 + i) * 3, ntop - 3 - f * 14, 1.5 + f * 2, 0, 7); ctx.fill();
+    }
+    // gold sign above it all
+    ctx.font = FONT(700, 12);
+    const txt = L('LAB', '研究所'), sw = Math.max(w * 0.8, ctx.measureText(txt).width + 14), sh = 17;
+    const sy = Math.min(ntop, y - 2 - dr) - sh - (busy ? 18 : 6);
+    ctx.fillStyle = '#E2A93B'; ctx.fillRect(cx - sw / 2, sy, sw, sh);
+    ctx.strokeStyle = '#2A1C02'; ctx.lineWidth = 1; ctx.strokeRect(cx - sw / 2 + 0.5, sy + 0.5, sw - 1, sh - 1);
+    ctx.fillStyle = '#16243A'; ctx.textAlign = 'center'; ctx.fillText(txt, cx, sy + 12.5); ctx.textAlign = 'left';
+    const hit = { id: '__lab', x0: Math.min(x - 5, cx - sw / 2) - 2, x1: Math.max(x + w + 5, cx + sw / 2) + 2, y0: sy - 4, y1: horizon + 6 };
     hits.push(hit);
     if (hoverId === '__lab') outline(hit);
-    const cx = x + w / 2, by = y - 46;
-    labTip = { x: cx, y: by - 4 };
+    const by = sy - 26;
+    labTip = { x: cx, y: sy - 4 };
     if (busy) {
       const left = S.research[busy], total = Math.max(left, S.resTotal || left);
-      const now = performance.now() / 1000;
-      for (let i = 0; i < 3; i++) {
-        const f = (now * 0.8 + i / 3) % 1;
-        ctx.fillStyle = `rgba(46,196,182,${0.8 * (1 - f)})`; ctx.beginPath(); ctx.arc(cx - 8 + i * 8, by + 4 - f * 14, 2 + f * 2, 0, 7); ctx.fill();
-      }
       drawProgress(cx, by + 4, Math.max(56, w * 1.1), 1 - left / total, (S.resMethod[busy] === 'comp' ? 'QM+MD ' : busy === 'screen' ? L('EXP ', '實驗 ') : L('R&D ', '研發 ')) + mo(left));
     } else if (!(S.labQueue || []).length && M.canResearch(S, 'screen', 'comp').ok) {
       const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 300);
