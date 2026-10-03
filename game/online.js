@@ -10,7 +10,14 @@
   if (!CC) return;
 
   // the web-app config from the Firebase console (Project settings → Your apps → Config); null = online off
-  const FIREBASE_CONFIG = null;
+  // (these keys are meant to be public; what anyone may read or write is set by the database rules)
+  const FIREBASE_CONFIG = {
+    apiKey: 'AIzaSyB24gSSORrWLAmSSB-gpySS9RnLQi1jqFI',
+    authDomain: 'amine-thermo-c9cc0.firebaseapp.com',
+    databaseURL: 'https://amine-thermo-c9cc0-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'amine-thermo-c9cc0',
+    appId: '1:828095109987:web:e8029f22fc2e9e45155156',
+  };
   const FB_VER = '10.12.2';
   const LOCAL = /[?&]net=local/.test(location.search);
   const ENABLED = LOCAL || !!FIREBASE_CONFIG;
