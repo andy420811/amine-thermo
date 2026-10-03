@@ -84,3 +84,10 @@ DIFF=hell PX=1 node tools/extreme.js texas  # 極端打法;PX = 電價相對可�
 - 難度在 `M.DIFFS`:easy / normal / hard,以及隱藏的 hell(彩蛋:3.5 秒內點研究所 10 次解鎖,整個畫面換成恐怖風格 `html.hell`)。
 - 匿名統計:每局結束送一筆摘要(`statPayload()`)到 Google 試算表(`tools/stats_apps_script.gs`,`STATS_URL` 空字串 = 關閉)。只收遊戲數據,**絕不加暱稱或任何個資**;`?debug` 的局不送;玩家可在選地區頁取消勾選。
 - localStorage 鍵:`cc2050-board-v10`(排行榜)、`cc2050-coach`(引導箭頭)、`cc2050-diff`、`cc2050-hell`、`cc2050-lang`、`cc2050-nick`、`cc2050-sfx`、`cc2050-tour`、`cc2050-stats`。
+
+## 連線版(andy420811 的 fork)
+
+- `game/online.js`:朋友同房比賽。同一個種子、地區、難度;鎖步前進(誰都不能超前最慢的人一個月以上),房主控制速度,場景左上面板即時顯示每個人的 CO₂/限額、民怨、資金、封存、分數,結束畫面列房間排名。分頁切到背景的人不會卡住大家,回來再追上。
+- `index.html` 只留掛鉤:`NET.canStep / onMonth / onEnd`、`window.CC`、`startGame(seed, online)`。改主迴圈或 `startGame` 時別弄掉。
+- 資料庫:Firebase Realtime Database,`online.js` 裡的 `FIREBASE_CONFIG`(null = 關閉),規則在 `tools/firebase_rules.json`。只傳暱稱和遊戲數字。
+- 測試:`?debug&net=local` 用同一個瀏覽器的兩個分頁對戰,不需要 Firebase。

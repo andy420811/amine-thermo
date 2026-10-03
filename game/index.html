@@ -951,6 +951,7 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
   let speed = 1, playing = false, acc = 0, lastT = 0;
   let toastN = 0, toastTimer = null;
   const MS_PER_MONTH = 1600;   // one game month every 1.6 s at 1×
+  const NET = {};   // online race hooks, filled in by online.js: canStep(m), onMonth(state), onEnd(state)
   const paused = () => ['ovLab', 'ovPlant', 'ovBuild', 'ovEvent', 'ovFind', 'ovPrice', 'ovAnger', 'ovBoard', 'ovHell', 'ovGuide', 'tour', 'ovManage'].some(id => !$(id).hidden);
 
   // ---------- best score per region (shown on the region cards) ----------
@@ -1842,6 +1843,7 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
     playing = false;
     const s = S, win = s.over.win;
     sendStats(s);
+    if (NET.onEnd) NET.onEnd(s);
     const why = {
       greenhouse: L('The limit-breach meter hit 100 %. The government revoked your operating licence.', '超標計量到了 100 %，政府吊銷了你的營運執照。'),
       anger: L('Protesters filled the streets. The city council voted your company out.', '抗議人潮塞滿街頭，市議會把你的公司趕下台。'),
@@ -2076,12 +2078,12 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
     $('ovIntro').hidden = false;
     playing = false;
   }
-  function startGame() {
-    S = M.newGame(undefined, region, diff); particles.length = 0; toastN = 0; findN = 0; headN = 0; statHist = []; statT0 = Date.now();
+  function startGame(seed, online) {
+    S = M.newGame(seed, region, diff); particles.length = 0; toastN = 0; findN = 0; headN = 0; statHist = []; statT0 = Date.now();
     document.documentElement.classList.toggle('hell', S.diff === 'hell');
     SND.unlock(); SND.play(S.diff === 'hell' ? 'hell' : 'click');
     $('ovIntro').hidden = true; setTab('city'); renderAll(); setSpeed(1); playing = true;
-    if (!store.get('cc2050-tour')) setTimeout(tourStart, 350);
+    if (!store.get('cc2050-tour') && !online) setTimeout(tourStart, 350);   // online: the tour would hold up the whole room
   }
   $('startBtn').onclick = () => {
     store.set('cc2050-nick', nick());   // optional: without a nickname the game is played but not ranked
@@ -2690,7 +2692,11 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
         acc = Math.max(0, acc) + dt * speed;
         let ticked = false;
         const top = S.news[0], breach0 = S.greenhouse, hl0 = S.headlineN;
-        while (acc >= MS_PER_MONTH && !S.over && !S.pending && S.headlineN === hl0) { acc -= MS_PER_MONTH; M.step(S); statSample(); ticked = true; }
+        while (acc >= MS_PER_MONTH && !S.over && !S.pending && S.headlineN === hl0) {
+          if (NET.canStep && !NET.canStep(S.m)) { acc = Math.min(acc, MS_PER_MONTH); break; }   // online race: wait for the slowest player
+          acc -= MS_PER_MONTH; M.step(S); statSample(); ticked = true;
+          if (NET.onMonth) NET.onMonth(S);
+        }
         if (ticked) { renderAll(); showToast(); soundsSince(top, breach0); }
         if (S.over) showEnd();
         else if (S.pending) { acc = 0; openEvent(); }
@@ -2729,6 +2735,13 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
     };
   }
 
+  // ---------- what online.js may use ----------
+  window.CC = {
+    NET, M, L, fmt, money, nick, setSpeed,
+    get S() { return S; }, get lang() { return lang; }, get region() { return region; }, get diff() { return diff; }, get playing() { return playing; },
+    start(seed, rg, df) { region = rg; diff = df; store.set('cc2050-nick', nick()); startGame(seed, true); },
+  };
+
   // ---------- boot ----------
   applyI18n();
   showIntro();
@@ -2741,3 +2754,4 @@ html, body, button, canvas { -webkit-tap-highlight-color: transparent; }
   else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
 })();
 </script>
+<script src="online.js" charset="utf-8"></script>
